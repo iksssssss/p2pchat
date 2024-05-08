@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P Chat</title>
+    <style>
+    html{
+        font-family: Helvetica ,sans-serif;
+        margin: 0px;
+        height:100%;
+        background-image: linear-gradient(-30deg, #a5f6f0, #E7DEF4);
+         }
+    body{
+        margin:0px;
+        height:100%;
+        }
+    header {
+        font-family: Helvetica ,sans-serif;
+        color: #5300bc;
+        height:13%;
+        display: grid;
+        grid-template-columns: 2fr 6fr 1fr 1fr;
+        padding: 10px;
+        text-align: center;}
+
+
+    .button-sec {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        }
+    .button{
+        background-color: #5300bc;
+        color: #cdb9e8;;
+        font-weight: bold;
+        border-radius: 200px;
+        border-width: 1px;
+        border-color: #6FBAC0;
+}
+    {% block styles %}{% endblock %}
+    </style>
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+    <header>
+        <h1 style="grid-column: 1 / span 1;">P2P Chat</h1>
+        <h4 style="grid-column: 4 / span 1; margin-top: 9px;">Settings</h4>
+
+    </header>
+    {% block content %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block styles %}
+    .chat-section{
+        border-width: 1px;
+        border-radius: 30px;
+        border-color: black;
+        border-style: solid;
+        height: 80%;
+        width: 90%;
+        margin-left: 5%;
+        display: grid;
+        grid-template-columns: 1fr 4fr;
+        grid-template-rows: 4fr 1fr;
+        background-color: rgb(255, 255, 255, 0.3);
+        border-radius: 30px;
+
+    }
+    #chat{
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+
+        border-color: black;
+        border-radius: 30px;
+        border-width: 1px;
+        grid-column: 2 / span 1;
+        grid-row: 1 / span 1;
+        overflow-anchor: none;
+
+}
+    form{
+
+        border-color: black;
+        border-radius: 30px;
+        border-width: 1px;
+        margin: 10px;
+        grid-column: 2 / span 1;
+        grid-row: 2 / span 1;
+        display: grid;
+        grid-template-columns: 85% 15%;
+        grid-template-columns: 1fr;
+
+}
+    #message-input{
+        grid-column: 1 / span 2;
+        grid-row: 1 / span 1;
+        background: rgba(255,255,255, 0.5);
+        border-radius: 490px;
+        border-width: 0px;
+        min-height: 100%;
+}
+
+    #message-input::placeholder{
+    font-size: 1em;
+    font-weight: bold;
+    color: grey
+}
+
+
+    #submiter{
+    position: relative;
+    grid-column: 2 / span 1;
+    grid-row: 1 / span 1;
+    height: 80%;
+    width: 60px;
+    margin-right: 15px;
+    margin-top: 10%;
+
+
+}
+    .button{
+
+}
+    .messagee{
+    font-size: medium;
+    width: fit-content; 
+    max-width: 40%;
+    color: rgba(0, 0, 0, 0.87);
+    background-color: rgb(144, 202, 249);
+    margin: 4px;
+    padding: 0.5em 0.75em;
+    border-radius: 24px;
+    float: right;
+    transition: background-color 1s ease 0s;
+    word-break: break-word;
+
+    }
+
+
+    .peers{
+    border-right-width: 1px;
+    border-right-color: black;
+    border-right-style: solid;
+    grid-column: 1 / span 1;
+    grid-row: 1 / span 2;
+    }
+
+    .peer{
+    font-size: 22px;
+    color: #51535c;
+    margin: 0px;
+    display: flex;
+    padding: 30px 10px;
+    justify-content: center;
+    background-color: #ffffff40;
+    border-bottom-width: 1px;
+    border-bottom-color: #0000004f;
+    border-bottom-style: solid;
+
+}
+
+
+{% endblock %}
+{% block head%}
+<script type="text/javascript">
+
+</script>
+
+
+
+
+{% endblock %}
+{% block content %}
+<section class="chat-section" >
+    <div id="chat" name="chat">
+        {% for message in messages %}
+            <h1 class="messagee"> {{message}} </h1>
+        {% endfor %}
+    </div>
+    <form method="post" id="send-form"  >
+        <input  type="text" id="message-input" placeholder="   Type your message..."  autocomplete=”off” name="message" value="" maxlength="100" size="10" />
+        <input class = "button" id = "submiter" type="submit"  value="Send">
+    </form>
+    <div class="peers">
+    {% for peer in peers %}
+        <h1 class="peer">{{peer}}</h1>
+    {% endfor %}
+    </div>
+</section>
+<script type="text/javascript">
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('send-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var l = {{messages}}
+            var messageInput = document.getElementById('message-input').value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/submit_message', true);
+            xhr.setRequestHeader('Content-Type', 'text/plain');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    document.getElementById('chat').innerHTML += '<h1 class="messagee">' + messageInput + '</h1>';
+                    document.getElementById('message-input').value = ''; // Clear the input field
+                }
+            };
+            xhr.send(messageInput);
+        });
+    });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    event.preventDefault();
+    function updateSectionContent() {
+        fetch('/update_section')
+            .then(response => response.text())
+            .then(content => {
+                document.getElementById('chat').innerHTML = content;
+            })
+            .catch(error => console.error('Error fetching section content:', error));
+    }
+
+    // Initial update when the page loads
+    updateSectionContent();
+
+    // Periodically update the section content every 5 seconds (adjust as needed)
+    setInterval(updateSectionContent, 100);
+});
+</script>
+{% for message in messages %}
+
+{% endfor %}
+
+{% endblock %} 
